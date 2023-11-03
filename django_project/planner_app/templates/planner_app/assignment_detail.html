@@ -1,0 +1,13 @@
+{% extends 'planner_app/base_template.html' %}
+
+
+{% block content %}
+<h1>Assignment Name: {{ assignment.title }}</h1>
+
+
+<p><strong>Course:</strong> {{ assignment.course }}</p>
+<p><strong>Deadline:</strong> {{ assignment.deadline }}</p>
+<p><strong>Priority:</strong> {{ assignment.priority }}</p>
+
+
+{% endblock %}
