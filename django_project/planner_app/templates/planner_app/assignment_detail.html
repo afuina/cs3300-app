@@ -9,5 +9,5 @@
 <p><strong>Deadline:</strong> {{ assignment.deadline }}</p>
 <p><strong>Priority:</strong> {{ assignment.priority }}</p>
 
-
+<a class="btn btn-primary" href="{% url 'update_assignment' assignment.id %}" role="button">Update Assignment</a>
 {% endblock %}

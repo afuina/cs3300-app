@@ -30,6 +30,20 @@ def createAssignment(request):
         form = AssignmentForm()
     
     return render(request, 'planner_app/assignment_form.html', {'form': form})
+
+# method to update/edit an assignment
+def updateAssignment(request, assignment_id):
+    assignment = Assignment.objects.get(pk=assignment_id)
+
+    if request.method == 'POST':
+        form = AssignmentForm(request.POST, instance=assignment)
+        if form.is_valid():
+            form.save()
+            return redirect('assignment-detail', assignment.id)  # Redirect to the assignment detail page
+    else:
+        form = AssignmentForm(instance=assignment)
+
+    return render(request, 'planner_app/assignment_update_form.html', {'form': form, 'assignment': assignment})
 class AssignmentListView(generic.ListView):
     model = Assignment  # Assignment model
     template_name = 'planner_app/assignment_list.html'  # Template for listing assignments
