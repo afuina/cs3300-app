@@ -44,6 +44,17 @@ def updateAssignment(request, assignment_id):
         form = AssignmentForm(instance=assignment)
 
     return render(request, 'planner_app/assignment_update_form.html', {'form': form, 'assignment': assignment})
+
+# method to delete an assignment
+def deleteAssignment(request, assignment_id):
+    assignment = Assignment.objects.get(pk=assignment_id)
+
+    if request.method == 'POST':
+        assignment.delete()
+        return redirect('assignments')  # Redirect to the portfolio detail page
+
+    return render(request, 'planner_app/assignment_confirm_delete.html', {'assignment': assignment})
+
 class AssignmentListView(generic.ListView):
     model = Assignment  # Assignment model
     template_name = 'planner_app/assignment_list.html'  # Template for listing assignments
