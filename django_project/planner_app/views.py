@@ -1,7 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views import generic
 from .models import Assignment
+from .forms import AssignmentForm
 
 # Create your views here.
 def index(request):
@@ -10,6 +11,25 @@ def index(request):
 
     return render(request, 'planner_app/index.html')
 
+# method to create an assignment
+def createAssignment(request):
+    if request.method == 'POST':
+        form = AssignmentForm(request.POST)
+        if form.is_valid():
+            # Create a new assignment object but don't save it to the database yet
+            new_assignment = form.save(commit=False)
+            
+            # You can perform additional processing here if needed
+            
+            # Save the assignment to the database
+            new_assignment.save()
+            
+            # Optionally, you can redirect to a page showing the created assignment
+            return redirect('assignment-detail', pk=new_assignment.pk)  # Define 'assignment_detail' URL pattern in your urls.py
+    else:
+        form = AssignmentForm()
+    
+    return render(request, 'planner_app/assignment_form.html', {'form': form})
 class AssignmentListView(generic.ListView):
     model = Assignment  # Assignment model
     template_name = 'planner_app/assignment_list.html'  # Template for listing assignments

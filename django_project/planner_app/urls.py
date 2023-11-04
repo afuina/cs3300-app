@@ -11,5 +11,6 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('assignments/', views.AssignmentListView.as_view(), name= 'assignments'),
     path('assignment/<int:pk>', views.AssignmentDetailView.as_view(), name='assignment-detail'),
+    path('assignments/create_assignment/', views.createAssignment, name='create_assignment'),
 
 ]

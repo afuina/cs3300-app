@@ -14,4 +14,6 @@
 {% else %}
 <p>There are no assignments added.</p>
 {% endif %}
+<!-- Add a link to create a new assignment  -->
+<a class="btn btn-primary" href="{% url 'create_assignment' %}" role="button">Add New Assignment</a>
 {% endblock %}
