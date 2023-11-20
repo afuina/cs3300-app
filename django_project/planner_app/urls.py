@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
 
 
@@ -14,4 +14,7 @@ urlpatterns = [
     path('assignments/create_assignment/', views.createAssignment, name='create_assignment'),
     path('assignment/<int:assignment_id>/update_assignment/', views.updateAssignment, name='update_assignment' ),
     path('assignment/<int:assignment_id>/delete_assignment/', views.deleteAssignment, name='delete_assignment' ),
+    path('accounts/', include('django.contrib.auth.urls')),
+    path('register/', views.registerPage, name = 'register_page'),
+   
 ]
