@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views import generic
 from .models import Assignment
-from .forms import AssignmentForm
+from .forms import AssignmentForm, CreateUserForm
+from django.contrib import messages
 
 # Create your views here.
 def index(request):
@@ -55,9 +56,24 @@ def deleteAssignment(request, assignment_id):
 
     return render(request, 'planner_app/assignment_confirm_delete.html', {'assignment': assignment})
 
+def registerPage(request):
+    form = CreateUserForm()
+
+    if request.method == 'POST':
+        form = CreateUserForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            username = form.cleaned_data.get('username')
+            
+            messages.success(request, 'Account was created for ' + username)
+            return redirect('login')
+        
+    return render(request, 'registration/register.html', {'form': form})
+
 class AssignmentListView(generic.ListView):
     model = Assignment  # Assignment model
     template_name = 'planner_app/assignment_list.html'  # Template for listing assignments
 class AssignmentDetailView(generic.DetailView):
     model = Assignment  # Assignment model
     template_name = 'planner_app/assignment_detail.html'  # Template for displaying assignment details
+
