@@ -14,3 +14,9 @@ class CreateUserForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['username', 'email']
+
+"""class UserForm(ModelForm):
+    class Meta:
+        model = User
+        fields = '__all__'
+"""

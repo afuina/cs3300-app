@@ -4,6 +4,12 @@ from django.views import generic
 from .models import Assignment
 from .forms import AssignmentForm, CreateUserForm
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from .decorators import allowed_users
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
+
+
 
 # Create your views here.
 def index(request):
@@ -13,6 +19,8 @@ def index(request):
     return render(request, 'planner_app/index.html')
 
 # method to create an assignment
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['user_role'])
 def createAssignment(request):
     if request.method == 'POST':
         form = AssignmentForm(request.POST)
@@ -21,7 +29,7 @@ def createAssignment(request):
             new_assignment = form.save(commit=False)
             
             # You can perform additional processing here if needed
-            
+            new_assignment.user = request.user # Associate the assignment with the logged-in user
             # Save the assignment to the database
             new_assignment.save()
             
@@ -33,6 +41,8 @@ def createAssignment(request):
     return render(request, 'planner_app/assignment_form.html', {'form': form})
 
 # method to update/edit an assignment
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['user_role'])
 def updateAssignment(request, assignment_id):
     assignment = Assignment.objects.get(pk=assignment_id)
 
@@ -47,6 +57,8 @@ def updateAssignment(request, assignment_id):
     return render(request, 'planner_app/assignment_update_form.html', {'form': form, 'assignment': assignment})
 
 # method to delete an assignment
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['user_role'])
 def deleteAssignment(request, assignment_id):
     assignment = Assignment.objects.get(pk=assignment_id)
 
@@ -56,6 +68,7 @@ def deleteAssignment(request, assignment_id):
 
     return render(request, 'planner_app/assignment_confirm_delete.html', {'assignment': assignment})
 
+# method to sign up for an account
 def registerPage(request):
     form = CreateUserForm()
 
@@ -70,10 +83,39 @@ def registerPage(request):
         
     return render(request, 'registration/register.html', {'form': form})
 
-class AssignmentListView(generic.ListView):
+# creates the page for the user once they are logged in
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['user_role'])
+def userPage(request):
+    user_id = request.user.id
+    # gets the assoc planner user through the assignments
+    planner_user = request.user.assignments.first()
+    form = AssignmentForm(instance = planner_user)
+    print('planner_user', planner_user)
+
+    if request.method == 'POST':
+        form = AssignmentForm(request.POST, request.FILES, instance= planner_user)
+        if form.is_valid():
+            form.save()
+    context = {'planner_user':planner_user, 'form':form}
+    return render(request, 'planner_app/user.html', context)
+
+
+class AssignmentListView(LoginRequiredMixin, generic.ListView):
+    login_url = 'login'
     model = Assignment  # Assignment model
     template_name = 'planner_app/assignment_list.html'  # Template for listing assignments
-class AssignmentDetailView(generic.DetailView):
+
+    # filter the assignment list for only those associated with the current user
+    def get_queryset(self):
+        return Assignment.objects.filter(user=self.request.user)
+
+class AssignmentDetailView(LoginRequiredMixin, generic.DetailView):
+    login_url = 'login'
     model = Assignment  # Assignment model
     template_name = 'planner_app/assignment_detail.html'  # Template for displaying assignment details
+
+     # filter the assignment detail for only those associated with the current user
+    def get_queryset(self):
+        return Assignment.objects.filter(user=self.request.user)
 

@@ -1,0 +1,16 @@
+{% extends 'planner_app/base_template.html' %}
+{% block content %}
+<h3> My Planner Book </h3>
+Welcome, {{user}}<br>
+
+    <a href="{% url 'assignments' %}">Upcoming Assignments</a>
+
+<h3> Account Information </h3>
+<form method="POST" action="" enctpye="multipart/form-data">
+    {% csrf_token %}
+    {{form.as_p}}
+    <input class="btn btn-primary" type="submit" name="Update">
+</form>
+{% endblock %}
+
+
