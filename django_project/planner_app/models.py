@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.contrib.auth.models import User
 
 # Create your models here.
 class Assignment(models.Model):
@@ -9,6 +10,9 @@ class Assignment(models.Model):
         ('!!!', 'High Priority')
     )
 
+    # each assignment is assoc to one user,so each user can 
+    # only view their assignments in their planner
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     title = models.CharField(max_length=200)
     course = models.CharField(max_length=200)
     deadline = models.CharField(max_length=200)
@@ -24,3 +28,4 @@ class Assignment(models.Model):
     # add a "View on Site" button to the model's record editing screens in the Admin site
     def get_absolute_url(self):
         return reverse('assignment-detail', args=[str(self.id)])
+
