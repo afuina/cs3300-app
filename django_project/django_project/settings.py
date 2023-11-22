@@ -16,6 +16,8 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Changes the default page that user is directed to after logging in
+LOGIN_REDIRECT_URL = 'user_page'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -136,5 +138,3 @@ MEDIA_URL = '/images/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Changes the default page that user is directed to after logging in
-LOGIN_REDIRECT_URL = 'user_page'
