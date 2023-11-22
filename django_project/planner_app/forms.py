@@ -9,7 +9,6 @@ class AssignmentForm(ModelForm):
     class Meta:
         model = Assignment
         fields =('title', 'course', 'deadline', 'priority')
-
 class CreateUserForm(UserCreationForm):
     class Meta:
         model = User
