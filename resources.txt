@@ -1,0 +1,5 @@
+Links for resources:
+
+Automated testing:
+https://docs.github.com/en/actions/quickstart
+https://www.atlassian.com/continuous-delivery/continuous-integration/how-to-get-to-continuous-integration
