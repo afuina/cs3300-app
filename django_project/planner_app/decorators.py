@@ -1,6 +1,11 @@
 from django.http import HttpResponse
 from django.shortcuts import redirect
 
+# I could not get this code to work - essentially it is supposed to limit access
+# for certain groups ie customers vs internal, but this is irrelevant for the planner
+# app because we only have one group of users. To implement this decorator, place this above a 
+# view function: @allowed_users(allowed_roles=['user_role']), also: from .decorators import allowed_users
+
 def allowed_users(allowed_roles=[]):
     def decorator(view_func):
         def wrapper_func(request, *args, **kwargs):

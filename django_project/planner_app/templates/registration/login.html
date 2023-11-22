@@ -34,7 +34,8 @@
       </tr>
     </table>
     <input type="submit" value="login">
-    <input type="hidden" name="next" value="{{ next }}">
+    <!-- Specify the next page the user will be taken to after log in -->
+    <input type="hidden" name="next" value="{{ user_page }}">  
   </form>
   <p><a href = "{% url 'register_page' %}">Sign Up</a></p>
 
