@@ -7,8 +7,15 @@ from django.test import SimpleTestCase
 from django.urls import reverse  
 from .models import Assignment
 
+from selenium.webdriver.chrome.options import Options
+
 # Resource 1: https://learndjango.com/tutorials/django-testing-tutorial
 # Resource 2: https://timadey.hashnode.dev/testing-django-apps-effectively
+
+# Run in headless mode for CI since no GUI is available 
+chrome_options = Options()
+chrome_options.add_argument('--headless')
+browser = webdriver.Chrome(options=chrome_options)
 
 # Create your tests here.
 
@@ -87,7 +94,10 @@ class NewAssignmentTest(LiveServerTestCase):
         # Create a test user
         self.user = User.objects.create_user(username='testuser',password='testpassword')
         # Create a browser instance
-        self.browser = webdriver.Chrome()
+        # Run in headless mode for CI since no GUI is available 
+        chrome_options = Options()
+        chrome_options.add_argument('--headless')
+        self.browser = webdriver.Chrome(options=chrome_options)
 
     def tearDown(self):
         # Close the browser
@@ -138,7 +148,10 @@ class NewAssignmentTest(LiveServerTestCase):
 class RegisterNewAccountTest(LiveServerTestCase):
     def setUp(self):
         # Create a browser instance
-        self.browser = webdriver.Chrome()
+        # Run in headless mode for CI since no GUI is available 
+        chrome_options = Options()
+        chrome_options.add_argument('--headless')
+        self.browser = webdriver.Chrome(options=chrome_options)
     
     def tearDown(self):
         # Close the browser
