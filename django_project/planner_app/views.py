@@ -85,6 +85,13 @@ def userPage(request):
     context = {'user': request.user}
     return render(request, 'planner_app/user.html', context)
 
+# allows user to update the completion status of the assignments
+@login_required(login_url='login')
+def markCompleted(request):
+    if request.method == 'POST':
+        completed_assignments = request.POST.getlist('completed_assignments')
+        Assignment.objects.filter(id__in=completed_assignments).update(completed=True)
+    return redirect('assignments')
 
 class AssignmentListView(LoginRequiredMixin, generic.ListView):
     login_url = 'login'
