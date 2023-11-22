@@ -3,3 +3,6 @@ Links for resources:
 Automated testing:
 https://docs.github.com/en/actions/quickstart
 https://www.atlassian.com/continuous-delivery/continuous-integration/how-to-get-to-continuous-integration
+
+Coverage Report:
+https://coverage.readthedocs.io/en/7.3.2/
