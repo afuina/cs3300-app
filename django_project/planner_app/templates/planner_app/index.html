@@ -1,17 +1,97 @@
-<!-- inherit from base.html-->
 {% extends "planner_app/base_template.html" %}
 
-
-<!-- Replace block content in base_template.html -->
 {% block content %}
-<h1>My Planner</h1>
+<style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f8f9fa; /* Light gray background */
+      color: #555; /* Dark gray text color */
+      font-size: 16px; /* Base font size */
+      line-height: 1.6;
+    }
 
+    .planner-container {
+      border: 2px solid #007bff; /* Border color */
+      border-radius: 10px; /* Rounded corners */
+      padding: 20px; /* Padding inside the border */
+      margin: 20px auto; /* Center the container */
+      max-width: 800px; /* Limit the width for better readability */
+      text-align: center;
+    }
 
-<h4>
-    Welcome to your Planner! This app is designed to 
-    help you keep track of all your upcoming deadlines.
-    Visit the "Assignments" tab to view your active assignments.
-</h4>
+    h1 {
+      font-family: 'Segoe UI'; /* Font for "My Planner" */
+      font-size: 48px;
+      color: #343a40; /* Dark gray text color */
+      margin-bottom: 20px;
+    }
 
+    h4 {
+        font-size: 24px;
+        margin-bottom: 40px;
+    }
+
+    .feature-container {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 50px;
+    }
+
+    .feature-box {
+      text-align: center;
+    }
+
+    .feature-icon {
+      font-size: 36px;
+      color: #dc3545; /* Red icon color */
+      margin-bottom: 10px;
+    }
+
+    .feature-title {
+      font-size: 24px;
+      margin-bottom: 10px;
+      color: #343a40; /* Dark gray feature title color */
+    }
+
+    .feature-description {
+      font-size: 16px;
+      color: #555; /* Light gray feature description color */
+    }
+  </style>
+
+  <head>
+    <!-- add icons stylesheet from internet -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  </head>
+
+  
+  <div class="planner-container">
+    <h1>My Planner</h1>
+    <h4>
+      Welcome to your Planner! This app is designed to help you keep track of all your upcoming deadlines.
+      Visit the "Assignments" tab to view your active assignments.
+    </h4>
+  </div>
+  <br>
+  <br>
+  <div class="feature-container">
+    <div class="feature-box">
+        <i class="material-icons feature-icon">event</i>
+        <h2 class="feature-title">Stay Organized</h2>
+        <p class="feature-description">Effortlessly manage your assignments and deadlines in one place.</p>
+      </div>
+      
+      <div class="feature-box">
+        <i class="material-icons feature-icon">pie_chart</i>
+        <h2 class="feature-title">Track Progress</h2>
+        <p class="feature-description">Visualize your progress and accomplishments over time.</p>
+      </div>
+      
+      <div class="feature-box">
+        <i class="material-icons feature-icon">notifications</i>
+        <h2 class="feature-title">Set Priorities</h2>
+        <p class="feature-description">Never miss a deadline with customizable priorities.</p>
+      </div>
+  </div>
 
 {% endblock %}

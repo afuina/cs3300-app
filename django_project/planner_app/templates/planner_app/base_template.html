@@ -1,12 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-    <style>
-        .smaller-image {
-            max-width: 150px; /* Adjust the maximum width as needed */
-            height: auto; /* Maintain the image's aspect ratio */
-        }
-    </style>
 <head>
     <title>My Planner</title>
     <meta charset="utf-8" />
@@ -14,35 +8,51 @@
     {% load bootstrap5 %}
     {% bootstrap_css %}
     {% bootstrap_javascript %}
+    
+    <style>
+        .smaller-image {
+            max-width: 150px; /* Adjust the maximum width as needed */
+            height: auto; /* Maintain the image's aspect ratio */
+        }
+
+        /* Customize navbar background color */
+        .navbar-custom {
+            background-color: #D3D3D3 ; /* Light grey background color */
+        }
+    </style>
 </head>
 
 <body>
-<div class="container-fluid">
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-        <div class="container-fluid">
-            <!-- Add a CSS class to control image size -->
-            <img class="smaller-image" src="{% static 'images/myplanner2.gif' %}">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'assignments' %}">Assignments</a>
-                    </li>
-                    {% if user.is_authenticated %}
-                        <a class="nav-link" href="{% url 'logout' %}?next={{request.path}}">Logout {{user}}</a>
-                    {% else %}
-                        <a class="nav-link" href="{% url 'login' %}?next={{request.path}}">Login</a>
-                    {% endif %}
-
-                  
-                </ul>
+    <div class="container-fluid">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-custom">
+            <div class="container-fluid">
+                <!-- Add a CSS class to control image size -->
+                <img class="smaller-image" src="{% static 'images/myplanner2.gif' %}">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'assignments' %}">Assignments</a>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav ms-auto"> <!-- ms-auto added here to push login/logout to right hand side  -->
+                        {% if user.is_authenticated %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'logout' %}?next={{request.path}}">Logout {{user}}</a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'login' %}?next={{request.path}}">Login</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
             </div>
-        </div>
-    </nav>
+        </nav>
 
     <!-- add block content from html template -->
     {% block content %}
