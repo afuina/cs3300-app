@@ -17,6 +17,7 @@ class Assignment(models.Model):
     course = models.CharField(max_length=200)
     deadline = models.CharField(max_length=200)
     priority = models.CharField(max_length=200, choices=PRIORITY, blank = True)
+    completed = models.BooleanField(default=False)
 
     #Define default String to return the name for representing the Model object."
     def __str__(self):

@@ -1,19 +1,134 @@
 {% extends 'planner_app/base_template.html' %}
 
-
 {% block content %}
-<h1>Assignment List</h1>
-{% if assignment_list %}
-<ul>
-{% for assignment in assignment_list %}
-<li>
-<a href="{{ assignment.get_absolute_url }}">{{ assignment.title }}</a>
-</li>
-{% endfor %}
-</ul>
-{% else %}
-<p>There are no assignments added.</p>
-{% endif %}
-<!-- Add a link to create a new assignment  -->
-<a class="btn btn-primary" href="{% url 'create_assignment' %}" role="button">Add New Assignment</a>
+  <style>
+    /* Add this inline style in your template */
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    li {
+      margin-bottom: 10px;
+      padding: 10px;
+      border-radius: 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    label {
+      cursor: pointer;
+      display: inline-block;
+    }
+
+    .assignment-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    #completed-assignments {
+      list-style-type: none;
+      padding: 0;
+      color: #888;
+    }
+
+    .assignment-link {
+      color: #007bff;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  </style>
+
+  <h1>Assignment List</h1>
+  {% if assignment_list %}
+    <form method="post" action="{% url 'mark_completed' %}">
+      {% csrf_token %}
+      <ul id="current-assignments">
+        {% for assignment in assignment_list %}
+          <li {% if assignment.completed %}style="display: none;"{% endif %} {% if not assignment.completed %}style="background-color: lightgreen;"{% endif %}>
+            <div>
+              <input type="checkbox" id="assignment_{{ assignment.id }}" name="completed_assignments" value="{{ assignment.id }}" {% if assignment.completed %}checked{% endif %}>
+              <label for="assignment_{{ assignment.id }}">{{ assignment.title }}</label>
+            </div>
+            <div class="assignment-info">
+              <span class="course">Course: {{ assignment.course }}</span>
+              <span class="deadline">Deadline: {{ assignment.deadline }}</span>
+              <a class="assignment-link" href="{% url 'assignment-detail' assignment.id %}">View Details</a>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+      <button type="submit">Mark Completed</button>
+    </form>
+
+    <!-- Completed Assignments Section -->
+    <h2>Completed Assignments</h2>
+    <ul id="completed-assignments">
+      {% for assignment in assignment_list %}
+        {% if assignment.completed %}
+          <li>
+            <label>{{ assignment.title }}</label>
+          </li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0"></script>
+
+    <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    const currentAssignments = document.getElementById('current-assignments');
+    const completedAssignments = document.getElementById('completed-assignments');
+
+    checkboxes.forEach(checkbox => {
+      checkbox.addEventListener('change', function () {
+        const assignmentId = this.value;
+        const assignmentLi = document.querySelector(`#completed-assignments li[data-id="${assignmentId}"]`);
+
+        if (this.checked) {
+          // Move to completed assignments
+          if (!assignmentLi) {
+            const assignmentTitle = this.nextElementSibling.textContent;
+            const li = document.createElement('li');
+            li.textContent = assignmentTitle;
+            li.setAttribute('data-id', assignmentId);
+            completedAssignments.appendChild(li);
+
+            // Hide the assignment from the current assignments list
+            const currentAssignmentLi = document.querySelector(`#current-assignments li[data-id="${assignmentId}"]`);
+            if (currentAssignmentLi) {
+              currentAssignmentLi.style.display = 'none';
+            }
+
+            // Trigger confetti effect
+            confetti({
+              particleCount: 100,
+              spread: 70,
+              origin: { y: 0.6 }
+            });
+          }
+        } else {
+          // Move back to current assignments
+          if (assignmentLi) {
+            completedAssignments.removeChild(assignmentLi);
+
+            // Show the assignment in the current assignments list
+            const currentAssignmentLi = document.querySelector(`#current-assignments li[data-id="${assignmentId}"]`);
+            if (currentAssignmentLi) {
+              currentAssignmentLi.style.display = 'block';
+            }
+          }
+        }
+      });
+    });
+  });
+</script>
+
+  {% else %}
+    <p>There are no assignments added.</p>
+  {% endif %}
+  <!-- Add a link to create a new assignment  -->
+  <a class="btn btn-primary" href="{% url 'create_assignment' %}" role="button">Add New Assignment</a>
 {% endblock %}
