@@ -1,4 +1,4 @@
-from django.test import TestCase, LiveServerTestCase
+from django.test import TestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
@@ -8,6 +8,8 @@ from django.urls import reverse
 from .models import Assignment
 
 from selenium.webdriver.chrome.options import Options
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase  # found out that you need to use this instead for static files
+# if webpage does not deal with static files, can just import django.test import LiveServerTestCase and pass that to function
 
 # Resource 1: https://learndjango.com/tutorials/django-testing-tutorial
 # Resource 2: https://timadey.hashnode.dev/testing-django-apps-effectively
@@ -89,7 +91,7 @@ class AssignmentDetailTests(TestCase):
 # 3: User clicks on "Create Assignment"
 # 4: User fills in assignment form information, saves 
 # 5: User sees the newly created assignment on the assignment list page
-class NewAssignmentTest(LiveServerTestCase):
+class NewAssignmentTest(StaticLiveServerTestCase):
     def setUp(self):
         # Create a test user
         self.user = User.objects.create_user(username='testuser',password='testpassword')
@@ -136,8 +138,9 @@ class NewAssignmentTest(LiveServerTestCase):
 
         # 5: The user sees the new assignment on the list page
         self.browser.get(self.live_server_url + '/assignments/')
-        new_assignment = self.browser.find_element(By.LINK_TEXT, 'My first assignment')
+        new_assignment = self.browser.find_element(By.XPATH, f"//label[text()='My first assignment']")
         self.assertIsNotNone(new_assignment)
+
 
 # Test to check the following:
 # 1: User navigates to log in page
@@ -145,7 +148,7 @@ class NewAssignmentTest(LiveServerTestCase):
 # 3: User fills in their information and saves
 # 4: User can now log in using newly created account
 # 5: User directed to welcome page
-class RegisterNewAccountTest(LiveServerTestCase):
+class RegisterNewAccountTest(StaticLiveServerTestCase):
     def setUp(self):
         # Create a browser instance
         # Run in headless mode for CI since no GUI is available 
